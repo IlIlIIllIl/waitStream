@@ -79,9 +79,16 @@ function checkStreaming(clientId){
             xhr.setRequestHeader("Authorization", authorization);
         },
         success : function(response){
-            if(response.data.length!==0)
-                location.href="https://twitch.tv/kumikomii";
-            
+            if(response.data.length!==0){
+                if(sw === false){
+                    sw=true;
+                    window.open("https://twitch.tv/kumikomii", '_blank');
+                }
+            } else{
+                if(sw === true){
+                    sw=false;
+                }
+            }
         }
     });
 }
