@@ -1,8 +1,10 @@
 let authorization = "";
 let sw = false;
+let popup = '';
 // -- 
 $(function(){
     getKeys();
+
     $('#startBtn').click(function(){
         let b = setToken();
         if(b)
@@ -50,6 +52,8 @@ function setToken(){
 }
 
 function waitStreaming(){
+    const device = deviceCheck();
+
     let clientId = $('#clientId').val();
     let secretKey = $('#secretKey').val();
     $('#startBtn').text('');
@@ -61,11 +65,11 @@ function waitStreaming(){
         Loading...
     `);
     setInterval(() => {
-        checkStreaming(clientId);
+        checkStreaming(clientId, device);
     }, 5000);
 }
 
-function checkStreaming(clientId){
+function checkStreaming(clientId, device){
     $.ajax({
         url: "https://api.twitch.tv/helix/streams",
         type: "GET",
@@ -79,14 +83,18 @@ function checkStreaming(clientId){
             xhr.setRequestHeader("Authorization", authorization);
         },
         success : function(response){
+            console.log('test')
             if(response.data.length!==0){
                 if(sw === false){
+                    console.log('방송시작')
                     sw=true;
-                    window.open("https://twitch.tv/kumikomii", '_blank');
+                    popup = window.open('https://www.twitch.tv/kumikomii?no-mobile-redirect=true')
                 }
             } else{
                 if(sw === true){
+                    console.log('방송종료')
                     sw=false;
+                    popup.close();    
                 }
             }
         }
@@ -112,3 +120,5 @@ function getCookie(cookieName){
     }
     return cookieValue;
 }
+
+
