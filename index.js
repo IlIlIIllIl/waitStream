@@ -52,7 +52,7 @@ function setToken(){
 }
 
 function waitStreaming(){
-    const device = deviceCheck();
+
 
     let clientId = $('#clientId').val();
     let secretKey = $('#secretKey').val();
@@ -65,11 +65,11 @@ function waitStreaming(){
         Loading...
     `);
     setInterval(() => {
-        checkStreaming(clientId, device);
+        checkStreaming(clientId);
     }, 5000);
 }
 
-function checkStreaming(clientId, device){
+function checkStreaming(clientId){
     $.ajax({
         url: "https://api.twitch.tv/helix/streams",
         type: "GET",
