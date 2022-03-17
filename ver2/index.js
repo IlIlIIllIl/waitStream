@@ -114,7 +114,14 @@ function checkStreaming(clientId){
                 if(sw === true){
                     console.log('방송종료')
                     sw=false;
-                    popup.close();    
+                    if( device ==='mobile' ){
+                        $('button').remove('#startBtn');
+                        $('#buttonDiv').append(`<button id="startBtn" type="button" class="btn btn-primary mb-3 float-right"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading...</button>`);
+                    }else{
+                        popup.close();    
+
+                    }
                 }
             }
         }
