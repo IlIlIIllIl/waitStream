@@ -1,3 +1,14 @@
+/*
+    ver2 - 모바일에서는 twitch앱으로 접속하게 끔 한 버전
+    장점 - 방송알림보다 좀 더 빠르게 알 수 있음 (알림이 오지 않아도 확인 가능) (ver1과 차이 없음) 
+    단점 - 모바일에서 한 번 앱 실행하고 나면 스크립트가 더 이상 동작 안함
+         - ( 실행된 웹이나 앱 둘 중 하나라도 팝업모드가 아니라면 끝 )
+         - 앱을 재시작하기 쉽지 않음( 권한문제 있음 )
+         - 딥링크로 앱을 실행하기 위해선 스크립트로 동작이 불가
+
+
+*/
+
 let authorization = "";
 let sw = false;
 let popup = '';
@@ -84,11 +95,20 @@ function checkStreaming(clientId){
         },
         success : function(response){
             console.log('test')
+            let device = deviceCheck();
             if(response.data.length!==0){
                 if(sw === false){
                     console.log('방송시작')
                     sw=true;
-                    popup = window.open('https://www.twitch.tv/kumikomii?no-mobile-redirect=true&muted=false')
+                    if( device ==='mobile' ){
+                        $('button').remove('#startBtn');
+                        $('#buttonDiv').append(`<button id="startBtn" onClick="location.href='twitch://open?stream=kumikomii'" type="button" class="btn btn-primary mb-3 float-right"><img src="twitch-brands.svg" alt="Breaking Borders Logo" height="25" width="25"> 앱실행</button>`);
+                        // if(confirm("앱을 실행하시겠습니까?") === true){
+                        //     locatioon.href='twitch://open?stream=kumikomii';
+                        // 
+                    }
+                    else
+                        popup = window.open('https://www.twitch.tv/kumikomii');
                 }
             } else{
                 if(sw === true){
@@ -121,4 +141,16 @@ function getCookie(cookieName){
     return cookieValue;
 }
 
+// PC, 모바일 구분 함수 --
+function deviceCheck(){
+    var filter = "win16|win32|win64|mac|macintel"; 
+    if ( navigator.platform ) { 
+        if ( filter.indexOf( navigator.platform.toLowerCase() ) < 0 ) { //mobile 
+            return 'mobile';
+        } else { //pc 
+            return 'pc';
+        } 
+    }
+
+}
 

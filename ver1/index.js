@@ -1,3 +1,9 @@
+/*
+    ver1 - 모바일에서도 PC버전 웹으로 동작하게끔 한 버전
+    장점 - 모바일에서 자동화가 잘됨 ( 자고있어도 방송이 리방되도 꺼졌다 재접속함 )
+    단점 - 모바일에서 PC화면으로 접속하다보니 UI가 불편함
+*/
+
 let authorization = "";
 let sw = false;
 let popup = '';
@@ -84,11 +90,15 @@ function checkStreaming(clientId){
         },
         success : function(response){
             console.log('test')
+            let device = deviceCheck();
             if(response.data.length!==0){
                 if(sw === false){
                     console.log('방송시작')
                     sw=true;
-                    popup = window.open('https://www.twitch.tv/kumikomii?no-mobile-redirect=true&muted=false')
+                    if( device ==='mobile' )
+                        popup = window.open('https://www.twitch.tv/kumikomii?no-mobile-redirect=true&muted=false');
+                    else
+                        popup = window.open('https://www.twitch.tv/kumikomii');
                 }
             } else{
                 if(sw === true){
@@ -121,4 +131,16 @@ function getCookie(cookieName){
     return cookieValue;
 }
 
+// PC, 모바일 구분 함수 --
+function deviceCheck(){
+    var filter = "win16|win32|win64|mac|macintel"; 
+    if ( navigator.platform ) { 
+        if ( filter.indexOf( navigator.platform.toLowerCase() ) < 0 ) { //mobile 
+            return 'mobile';
+        } else { //pc 
+            return 'pc';
+        } 
+    }
+
+}
 
